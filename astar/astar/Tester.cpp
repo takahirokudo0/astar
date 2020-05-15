@@ -5,10 +5,10 @@
 
 #include "AStar.h"
 
-// AStarã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã‚’å®šç¾©
+// AStar‚ÌƒeƒXƒgƒP[ƒX‚ğ’è‹`
 std::vector<TestCase> CreateAStarTestCases() {
-	// å…±é€šå…¥åŠ›ãƒ‡ãƒ¼ã‚¿ã‚’å®šç¾©
-	// NOTE: staticå®šç¾©ã‹ã¤ãƒ©ãƒ ãƒ€ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’å‚ç…§ã«ã™ã‚‹ã“ã¨ã§å¤šé‡ã®ã‚³ãƒ”ãƒ¼ã‚’é˜²ã
+	// ‹¤’Ê“ü—Íƒf[ƒ^‚ğ’è‹`
+	// NOTE: static’è‹`‚©‚Âƒ‰ƒ€ƒ_‚ÌƒLƒƒƒvƒ`ƒƒ‚ğQÆ‚É‚·‚é‚±‚Æ‚Å‘½—Ê‚ÌƒRƒs[‚ğ–h‚®
 	static auto map = std::make_shared<Map>();
 	map->SetMap(std::vector<std::vector<int>> {
 		{ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 },
@@ -25,9 +25,9 @@ std::vector<TestCase> CreateAStarTestCases() {
 
 	std::vector<TestCase> testcases;
 	testcases.push_back(TestCase([&]() {
-		AStar astar(map);													// ãƒ†ã‚¹ãƒˆå¯¾è±¡ç”Ÿæˆ
-		Route route = astar.Search(Position(1, 1), Position(8, 8), false);	// å®Ÿè¡Œ
-		Route expected = Route(std::list<boost::optional<Position>>			// æœŸå¾…å€¤
+		AStar astar(map);													// ƒeƒXƒg‘ÎÛ¶¬
+		Route route = astar.Search(Position(1, 1), Position(8, 8), false);	// Às
+		Route expected = Route(std::list<boost::optional<Position>>			// Šú‘Ò’l
 		{
 			Position(1, 1), Position(2, 1), Position(2, 0), Position(3, 0),
 				Position(4, 0), Position(4, 1), Position(4, 2), Position(4, 3),
@@ -35,7 +35,7 @@ std::vector<TestCase> CreateAStarTestCases() {
 				Position(6, 6), Position(6, 7), Position(6, 8), Position(6, 9),
 				Position(7, 9), Position(8, 9), Position(8, 8),
 		});
-		// ãƒ†ã‚¹ãƒˆçµæœã®æ¯”è¼ƒ
+		// ƒeƒXƒgŒ‹‰Ê‚Ì”äŠr
 		return std::equal(expected.cbegin(), expected.cend(), route.cbegin());
 	}));
 	testcases.push_back(TestCase([&]() {
@@ -52,10 +52,10 @@ std::vector<TestCase> CreateAStarTestCases() {
 
 	return testcases;
 }
-// SampleAã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã‚’å®šç¾©ï¼ˆå‡ºåŠ›çµæœç¢ºèªç”¨ã®ãƒ€ãƒŸãƒ¼ãƒ†ã‚¹ãƒˆï¼‰
+// SampleA‚ÌƒeƒXƒgƒP[ƒX‚ğ’è‹`io—ÍŒ‹‰ÊŠm”F—p‚Ìƒ_ƒ~[ƒeƒXƒgj
 std::vector<TestCase> CreateSampleATestCases() {
 	std::vector<TestCase> testcases;
-	// ãƒ€ãƒŸãƒ¼ã¨ã—ã¦ç©ºã£ã½ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã‚’40å€‹è¿½åŠ ã™ã‚‹
+	// ƒ_ƒ~[‚Æ‚µ‚Ä‹ó‚Á‚Û‚ÌƒeƒXƒgƒP[ƒX‚ğ40ŒÂ’Ç‰Á‚·‚é
 	for (int i = 0; i < 40; i++) {
 		testcases.push_back(TestCase([]() {return true; }));
 	}
@@ -63,16 +63,16 @@ std::vector<TestCase> CreateSampleATestCases() {
 	return testcases;
 }
 
-// ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã‚’ä½œæˆ
+// ƒeƒXƒgƒP[ƒX‚ğì¬
 std::vector<TestCase> CreateTestCases() {
-	// ãƒ†ã‚¹ãƒˆå¯¾è±¡ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹å®šç¾©ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚»ãƒƒãƒˆ
-	// TODO: å¤–éƒ¨ç’°å¢ƒã‹ã‚‰ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ä¸è¦ã§è¨­å®šã‚’å¤‰æ›´ã—ãŸã„
+	// ƒeƒXƒg‘ÎÛ‚ÌƒeƒXƒgƒP[ƒX’è‹`ƒƒ\ƒbƒh‚ğƒZƒbƒg
+	// TODO: ŠO•”ŠÂ‹«‚©‚çƒRƒ“ƒpƒCƒ‹•s—v‚Åİ’è‚ğ•ÏX‚µ‚½‚¢
 	auto funcs = {
 		CreateAStarTestCases,
 		CreateSampleATestCases
 	};
 
-	// ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã‚’ä½œæˆã™ã‚‹
+	// ƒeƒXƒgƒP[ƒX‚ğì¬‚·‚é
 	std::vector<TestCase> testcases;
 	for (auto func : funcs) {
 		auto cases = func();
@@ -82,12 +82,12 @@ std::vector<TestCase> CreateTestCases() {
 	return testcases;
 }
 
-// ãƒ†ã‚¹ãƒˆã®å®Ÿè¡Œ
+// ƒeƒXƒg‚ÌÀs
 void Tester::Run() {
-	// ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹å–å¾—ï¼ˆæ§˜ã€…ãªãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã‚’ï¼‘ã¤ã®é…åˆ—ã§ã¾ã¨ã‚ã¦ç®¡ç†ï¼‰
+	// ƒeƒXƒgƒP[ƒXæ“¾i—lX‚ÈƒeƒXƒgƒP[ƒX‚ğ‚P‚Â‚Ì”z—ñ‚Å‚Ü‚Æ‚ß‚ÄŠÇ—j
 	std::vector<TestCase> testcases = CreateTestCases();
 
-	// ãƒ†ã‚¹ãƒˆã®å®Ÿè¡Œã¨çµæœã®å‡ºåŠ›
+	// ƒeƒXƒg‚ÌÀs‚ÆŒ‹‰Ê‚Ìo—Í
 	int counter = 0;
 	int max_count = testcases.size();
 	for (int i = 0; i < testcases.size(); i++) {
@@ -118,6 +118,6 @@ void Tester::DisplayResult(int number, int max_count, bool result, bool is_last)
 	}
 	std::cout << ss.str();
 
-	// TODO: ã‚¨ãƒ©ãƒ¼åˆ¤å®šã¨ãªã£ãŸãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã®ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é›†ç©ã—ã¦ãŠã„ã¦ã€å‡ºåŠ›ã—ãŸã„
+	// TODO: ƒGƒ‰[”»’è‚Æ‚È‚Á‚½ƒeƒXƒgƒP[ƒX‚ÌƒGƒ‰[ƒƒbƒZ[ƒW‚ğWÏ‚µ‚Ä‚¨‚¢‚ÄAo—Í‚µ‚½‚¢
 
 }

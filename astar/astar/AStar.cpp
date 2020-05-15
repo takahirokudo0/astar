@@ -7,7 +7,7 @@
 #include <limits>
 #include "AStar.h"
 
-// äºŒç‚¹é–“ã®è·é›¢ã‚’è¨ˆç®—
+// “ñ“_ŠÔ‚Ì‹——£‚ğŒvZ
 float CalcDistance(const Position& pos1, const Position& pos2) {
 	return sqrtf(static_cast<float>(
 		(pos1.x - pos2.x) * (pos1.x - pos2.x) +
@@ -16,7 +16,7 @@ float CalcDistance(const Position& pos1, const Position& pos2) {
 
 void SearchRoute()
 {
-	// ãƒãƒƒãƒ—ä½œæˆ
+	// ƒ}ƒbƒvì¬
 	auto map = std::make_shared<Map>();
 	map->SetMap(std::vector<std::vector<int>> {
 		{ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 },
@@ -30,10 +30,10 @@ void SearchRoute()
 		{ 1, 0, 1, 0, 0, 1, 1, 0, 1, 1 },
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 	});
-	// ãƒãƒƒãƒ—ã‹ã‚‰ã‚°ãƒ©ãƒ•ã‚’ä½œæˆ
+	// ƒ}ƒbƒv‚©‚çƒOƒ‰ƒt‚ğì¬
 	auto graph = std::make_shared<Graph>();
 	graph->Create(*map);
-	// æ¢ç´¢ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆ
+	// ’TõƒNƒ‰ƒX‚ğì¬
 	AStar astar;
 	astar.SetMap(map);
 	astar.SetGraph(graph);
@@ -55,7 +55,7 @@ void AStar::Init()
 	for (int y = 0; y < map->GetHeight(); y++) {
 		last_update_positions[y].resize(map->GetWidth());
 	}
-	// ã‚³ã‚¹ãƒˆãªã©ã‚’åˆæœŸåŒ–
+	// ƒRƒXƒg‚È‚Ç‚ğ‰Šú‰»
 	graph->Reset();
 }
 Route AStar::Search(const Position& start, const Position& end, bool is_display)
@@ -63,79 +63,79 @@ Route AStar::Search(const Position& start, const Position& end, bool is_display)
 	Init();
 
 	NodeList open_list, close_list;
-	// é–‹å§‹ãƒãƒ¼ãƒ‰ã‚’openã«è¿½åŠ 
+	// ŠJnƒm[ƒh‚ğopen‚É’Ç‰Á
 	open_list.push_back(&(graph->Get(start.y, start.x)));
 	Node* node = nullptr;
-	// æ¢ç´¢ openãŒç©ºã®å ´åˆã€æ¢ç´¢ã¯å¤±æ•—
+	// ’Tõ open‚ª‹ó‚Ìê‡A’Tõ‚Í¸”s
 	while (!open_list.empty()) {
-		// open_listã‹ã‚‰æ¬¡ã«æ¢ç´¢ã™ã‚‹ãƒãƒ¼ãƒ‰ã‚’å–å¾—ã™ã‚‹
+		// open_list‚©‚çŸ‚É’Tõ‚·‚éƒm[ƒh‚ğæ“¾‚·‚é
 		node = GetNextNode(open_list);
-		// ã‚´ãƒ¼ãƒ«ã«åˆ°é”ã—ãŸã‹ï¼Ÿ
+		// ƒS[ƒ‹‚É“’B‚µ‚½‚©H
 		if (!node && node->position == end) {
-			// æœ€çµ‚ãƒãƒ¼ãƒ‰ã‚‚ã‚¯ãƒ­ãƒ¼ã‚ºãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			// ÅIƒm[ƒh‚àƒNƒ[ƒYƒŠƒXƒg‚É’Ç‰Á‚·‚é
 			close_list.push_back(node);
 			break;
 		}
-		// ä¸Šä¸‹å·¦å³ã®éš£æ¥ãƒãƒ¼ãƒ‰ã‚’openã™ã‚‹
+		// ã‰º¶‰E‚Ì—×Úƒm[ƒh‚ğopen‚·‚é
 		OpenAdjacent(node, open_list, close_list, end);
-		// æ¢ç´¢ãŒçµ‚äº†ã—ãŸã®ã§closeã™ã‚‹
+		// ’Tõ‚ªI—¹‚µ‚½‚Ì‚Åclose‚·‚é
 		close_list.push_back(node);
 	}
-	// çµŒè·¯å¾©å…ƒ
+	// Œo˜H•œŒ³
 	auto route = Route::Create(start, end, last_update_positions);
-	// çµŒè·¯è¡¨ç¤º
+	// Œo˜H•\¦
 	if (is_display) {
 		route.DisplayRoute(map, start, end);
 	}
 	return route;
 }
-// openã‹ã‚‰æ¬¡ã®æ¢ç´¢ãƒãƒ¼ãƒ‰ã‚’å–å¾—ã™ã‚‹
+// open‚©‚çŸ‚Ì’Tõƒm[ƒh‚ğæ“¾‚·‚é
 Node* AStar::GetNextNode(NodeList& open_list)
 {
-	// openã‚’ã‚³ã‚¹ãƒˆã®æ˜‡é †ã§ã‚½ãƒ¼ãƒˆ
+	// open‚ğƒRƒXƒg‚Ì¸‡‚Åƒ\[ƒg
 	std::sort(open_list.begin(), open_list.end(),
 		[](Node* a, Node* b) { return a->total_cost > b->total_cost; });
-	// openã‹ã‚‰æœ€å°ã‚³ã‚¹ãƒˆã®ãƒãƒ¼ãƒ‰ã‚’å–å¾—
+	// open‚©‚çÅ¬ƒRƒXƒg‚Ìƒm[ƒh‚ğæ“¾
 	auto node = open_list.front();
-	// openã‹ã‚‰å‰Šé™¤
+	// open‚©‚çíœ
 	open_list.erase(open_list.begin());
 	return node;
 }
-// éš£æ¥ãƒãƒ¼ãƒ‰ã‚’æ¢ç´¢ã™ã‚‹
+// —×Úƒm[ƒh‚ğ’Tõ‚·‚é
 void AStar::OpenAdjacent(Node* node, NodeList& open_list, NodeList& close_list, const Position& end) {
 	static int OpenAdjacentCount = 0;
 	OpenAdjacentCount++;
-	// ä¸Šä¸‹å·¦å³ã®éš£æ¥ãƒãƒ¼ãƒ‰ã‚’openã™ã‚‹
+	// ã‰º¶‰E‚Ì—×Úƒm[ƒh‚ğopen‚·‚é
 	for (auto edge : node->edges) {
-		// ã‚¨ãƒƒã‚¸ã¸ã®ç§»å‹•ã‚³ã‚¹ãƒˆ
+		// ƒGƒbƒW‚Ö‚ÌˆÚ“®ƒRƒXƒg
 		float edge_cost = static_cast<float>(map->Get(edge->position.y, edge->position.x));
-		// ã‚¨ãƒƒã‚¸ã®äºˆæ¸¬ã‚³ã‚¹ãƒˆ
+		// ƒGƒbƒW‚Ì—\‘ªƒRƒXƒg
 		if (edge->heuristic_cost == std::numeric_limits<float>::max()) {
 			edge->heuristic_cost = CalcDistance(end, edge->position);
 		}
-		// ã“ã“ã¾ã§ã®ãƒˆãƒ¼ã‚¿ãƒ«ã‚³ã‚¹ãƒˆ
+		// ‚±‚±‚Ü‚Å‚Ìƒg[ƒ^ƒ‹ƒRƒXƒg
 		float total_cost = node->total_cost;
-		// å¯¾è±¡ãƒãƒ¼ãƒ‰ã¸é€²ã‚“ã æ™‚ã®ã‚´ãƒ¼ãƒ«ã¾ã§ã®æƒ³å®šã‚³ã‚¹ãƒˆ
+		// ‘ÎÛƒm[ƒh‚Öi‚ñ‚¾‚ÌƒS[ƒ‹‚Ü‚Å‚Ì‘z’èƒRƒXƒg
 		float cost = total_cost + edge_cost + edge->heuristic_cost;
 		if (AddOpenList(open_list, close_list, edge, cost)) {
 			edge->total_cost = cost;
-			// çµŒè·¯å¾©å…ƒç”¨ã«ã“ã®ãƒãƒ¼ãƒ‰ã‚’æœ€å¾Œã«æ›´æ–°ã—ãŸåº§æ¨™ã‚’ä¿å­˜ã™ã‚‹ã€‚
+			// Œo˜H•œŒ³—p‚É‚±‚Ìƒm[ƒh‚ğÅŒã‚ÉXV‚µ‚½À•W‚ğ•Û‘¶‚·‚éB
 			last_update_positions[edge->position.y][edge->position.x] = node->position;
 		}
 	}
 }
-// openã¸ãƒãƒ¼ãƒ‰ã‚’è¿½åŠ 
+// open‚Öƒm[ƒh‚ğ’Ç‰Á
 bool AStar::AddOpenList(NodeList& open_list, NodeList& close_list, Node* target_node, float cost)
 {
 	bool can_update = true;
-	// å¯¾è±¡ãƒãƒ¼ãƒ‰ã¸ã®æœ€çŸ­çµŒè·¯ã§ã‚ã‚Œã°open/closeã‹ã‚‰å‰Šé™¤
+	// ‘ÎÛƒm[ƒh‚Ö‚ÌÅ’ZŒo˜H‚Å‚ ‚ê‚Îopen/close‚©‚çíœ
 	if (close_list.EraseNode(target_node, cost) == NodeList::EraseResult::NotErase) {
 		can_update = false;
 	}
 	if (open_list.EraseNode(target_node, cost) == NodeList::EraseResult::NotErase) {
 		can_update = false;
 	}
-	// ã“ã“ã¾ã§ã®æœ€çŸ­çµŒè·¯ã§ã‚ã‚Œã°openã™ã‚‹
+	// ‚±‚±‚Ü‚Å‚ÌÅ’ZŒo˜H‚Å‚ ‚ê‚Îopen‚·‚é
 	if (can_update) {
 		open_list.push_back(target_node);
 		return true;
@@ -143,12 +143,12 @@ bool AStar::AddOpenList(NodeList& open_list, NodeList& close_list, Node* target_
 	return false;
 }
 
-// ã‚°ãƒ©ãƒ•ã®ä½œæˆ
+// ƒOƒ‰ƒt‚Ìì¬
 void Graph::Create(const Map& map) {
 	graph.clear();
 	height = map.GetHeight();
 	width = map.GetWidth();
-	// é…åˆ—ã®ã‚µã‚¤ã‚ºç¢ºä¿
+	// ”z—ñ‚ÌƒTƒCƒYŠm•Û
 	for (int y = 0; y < height; y++) {
 		graph.resize(height);
 		for (int x = 0; x < width; x++) {
@@ -157,14 +157,14 @@ void Graph::Create(const Map& map) {
 	}
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			// åº§æ¨™ã®è¨­å®š
+			// À•W‚Ìİ’è
 			graph[y][x].position = Position(x, y);
-			// ã‚¨ãƒƒã‚¸ã®è¨­å®š
+			// ƒGƒbƒW‚Ìİ’è
 			Position adjacent_positions[] = {
-				Position(x, y - 1), //ä¸Š
-				Position(x, y + 1),	//ä¸‹
-				Position(x - 1, y),	//å·¦
-				Position(x + 1, y),	//å³
+				Position(x, y - 1), //ã
+				Position(x, y + 1),	//‰º
+				Position(x - 1, y),	//¶
+				Position(x + 1, y),	//‰E
 			};
 			for (auto pos : adjacent_positions) {
 				if (map.IsInRange(pos) && IsTraversable(map.Get(y, x), map.Get(pos.y, pos.x))) {
@@ -174,13 +174,13 @@ void Graph::Create(const Map& map) {
 		}
 	}
 }
-// ã‚°ãƒ©ãƒ•ã®ãƒªã‚»ãƒƒãƒˆ
+// ƒOƒ‰ƒt‚ÌƒŠƒZƒbƒg
 void Graph::Reset() {
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			// ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚³ã‚¹ãƒˆã®åˆæœŸåŒ–ï¼ˆå¿…è¦ãªæ™‚ã«ä¸€åº¦ã ã‘è¨ˆç®—ï¼‰
+			// ƒqƒ…[ƒŠƒXƒeƒBƒbƒNƒRƒXƒg‚Ì‰Šú‰»i•K—v‚È‚Éˆê“x‚¾‚¯ŒvZj
 			graph[y][x].heuristic_cost = std::numeric_limits<float>::max();
-			// ãƒˆãƒ¼ã‚¿ãƒ«ã‚³ã‚¹ãƒˆã®åˆæœŸåŒ–
+			// ƒg[ƒ^ƒ‹ƒRƒXƒg‚Ì‰Šú‰»
 			graph[y][x].total_cost = 0;
 		}
 	}
@@ -190,7 +190,7 @@ Route::Route(std::list<boost::optional<Position>> list)
 {
 	insert(end(), list.begin(), list.end());
 }
-// æ¢ç´¢ã—ãŸãƒ«ãƒ¼ãƒˆã‚’è¡¨ç¤ºã™ã‚‹
+// ’Tõ‚µ‚½ƒ‹[ƒg‚ğ•\¦‚·‚é
 void Route::DisplayRoute(std::shared_ptr<Map> map, const Position& start, const Position& end) {
 	std::cout << "--------------------" << std::endl;
 	if (empty()) {
@@ -202,19 +202,19 @@ void Route::DisplayRoute(std::shared_ptr<Map> map, const Position& start, const 
 	//}
 	for (int y = 0; y < map->GetHeight(); y++) {
 		for (int x = 0; x < map->GetWidth(); x++) {
-			// ã‚´ãƒ¼ãƒ«ã®å ´åˆã¯Gã‚’å‡ºåŠ›
+			// ƒS[ƒ‹‚Ìê‡‚ÍG‚ğo—Í
 			if (end == Position(x, y)) {
 				std::cout << " G";
 			}
-			// ã‚¹ã‚¿ãƒ¼ãƒˆã®å ´åˆã¯Sã‚’å‡ºåŠ›
+			// ƒXƒ^[ƒg‚Ìê‡‚ÍS‚ğo—Í
 			else if (start == Position(x, y)) {
 				std::cout << " S";
 			}
-			// çµŒè·¯ã®å ´åˆã¯*ã‚’å‡ºåŠ›
+			// Œo˜H‚Ìê‡‚Í*‚ğo—Í
 			else if (std::find(begin(), this->end(), Position(x, y)) != this->end()) {
 				std::cout << " *";
 			}
-			// ãã®ä»–ã®å ´åˆã¯åœ°å½¢ã‚’å‡ºåŠ›
+			// ‚»‚Ì‘¼‚Ìê‡‚Í’nŒ`‚ğo—Í
 			else {
 				std::cout << " " << map->Get(y, x);
 			}
@@ -222,35 +222,35 @@ void Route::DisplayRoute(std::shared_ptr<Map> map, const Position& start, const 
 		std::cout << std::endl;
 	}
 }
-// çµŒè·¯å¾©å…ƒ
+// Œo˜H•œŒ³
 Route Route::Create(const Position& start, const Position& end, std::vector<std::vector<boost::optional<Position>>> last_update_positions) {
 	Route route;
 	route.push_back(end);
 	while (1) {
 		auto pos = route.front();
-		// çµ‚äº†åˆ¤å®š startã¾ã§åˆ°é”ã—ãŸã‹ï¼Ÿ
+		// I—¹”»’è start‚Ü‚Å“’B‚µ‚½‚©H
 		if (pos == start) {
-			break;		// çµ‚äº†
+			break;		// I—¹
 		}
 		if (pos != boost::none) {
 			route.push_front(last_update_positions[pos->y][pos->x]);
 		}
 		else {
 			route.clear();
-			break;	// çµŒè·¯ãŒç„¡ã‹ã£ãŸãŸã‚çµ‚äº†
+			break;	// Œo˜H‚ª–³‚©‚Á‚½‚½‚ßI—¹
 		}
 	}
 	return route;
 }
 
-// ãƒãƒ¼ãƒ‰å‰Šé™¤
+// ƒm[ƒhíœ
 NodeList::EraseResult NodeList::EraseNode(Node* target_node, float cost) {
 	for (auto it = begin(); it != end(); it++) {
 		auto node = *it;
 		if (node->position == target_node->position)
 		{
 			if (target_node->total_cost > cost) {
-				erase(it);	//å‰Šé™¤
+				erase(it);	//íœ
 				return EraseResult::Erased;
 			}
 			else {

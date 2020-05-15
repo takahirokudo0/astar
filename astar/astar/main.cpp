@@ -3,10 +3,10 @@
 
 int main()
 {
-	// æ™®é€šã«AStarã‚’å®Ÿè¡Œ
+	// •’Ê‚ÉAStar‚ğÀs
 	SearchRoute();
 
-	// ä½œæˆæ¸ˆã¿ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ã«åŸºã¥ã„ã¦AStarã®ãƒ†ã‚¹ãƒˆã‚’å®Ÿè¡Œ
+	// ì¬Ï‚İƒeƒXƒgƒP[ƒX‚ÉŠî‚Ã‚¢‚ÄAStar‚ÌƒeƒXƒg‚ğÀs
 	Tester tester;
 	tester.Run();
 

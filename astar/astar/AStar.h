@@ -8,7 +8,7 @@
 
 void SearchRoute();
 
-// åº§æ¨™ã‚¯ãƒ©ã‚¹
+// À•WƒNƒ‰ƒX
 class Position {
 public:
 	Position() {}
@@ -18,7 +18,7 @@ public:
 	}
 	int x = -1, y = -1;
 };
-// ãƒãƒƒãƒ—ã‚¯ãƒ©ã‚¹
+// ƒ}ƒbƒvƒNƒ‰ƒX
 class Map {
 public:
 	bool IsInRange(const Position& pos) const {
@@ -38,16 +38,16 @@ private:
 	int width = 10;
 	std::vector<std::vector<int>> map;
 };
-// ãƒãƒ¼ãƒ‰ã‚¯ãƒ©ã‚¹
+// ƒm[ƒhƒNƒ‰ƒX
 class Node {
 public:
 	Node() {}
 	Position position;
-	std::vector<Node*> edges;	// éš£æ¥ãƒãƒ¼ãƒ‰ã¯ã¾ã ã‚ˆãã‚ã‹ã‚‰ãªã„
+	std::vector<Node*> edges;	// —×Úƒm[ƒh‚Í‚Ü‚¾‚æ‚­‚í‚©‚ç‚È‚¢
 	float heuristic_cost;
 	float total_cost;
 };
-// ã‚°ãƒ©ãƒ•ã‚¯ãƒ©ã‚¹
+// ƒOƒ‰ƒtƒNƒ‰ƒX
 class Graph {
 public:
 	void Create(const Map& map);
@@ -58,9 +58,9 @@ public:
 	Node& Get(int y, int x) {
 		return graph[y][x];
 	}
-	// é€šè¡Œå¯èƒ½ã‹ï¼Ÿ
+	// ’Ês‰Â”\‚©H
 	bool IsTraversable(int current, int target) {
-		// é«˜ä½å·®ã®å ´åˆãªã©ã¯åˆ¤å®šã‚’å¤‰ãˆã‚‹
+		// ‚’á·‚Ìê‡‚È‚Ç‚Í”»’è‚ğ•Ï‚¦‚é
 		if (target == 0) {
 			return false;
 		}
@@ -71,12 +71,12 @@ private:
 	int width = 0;
 	std::vector<std::vector<Node>> graph;
 };
-// çµŒè·¯ã‚¯ãƒ©ã‚¹
+// Œo˜HƒNƒ‰ƒX
 class Route : public std::list<boost::optional<Position>> {
 public:
 	Route() {}
 	Route(std::list<boost::optional<Position>> list);
-	// æ¢ç´¢ã—ãŸãƒ«ãƒ¼ãƒˆã‚’è¡¨ç¤ºã™ã‚‹
+	// ’Tõ‚µ‚½ƒ‹[ƒg‚ğ•\¦‚·‚é
 	void DisplayRoute(std::shared_ptr<Map> map, const Position& start, const Position& end);
 	static Route Create(const Position& start, const Position& end, std::vector<std::vector<boost::optional<Position>>> last_update_positions);
 };
@@ -87,10 +87,10 @@ public:
 		NotErase,
 		NotFound,
 	};
-	// ãƒãƒ¼ãƒ‰ã®å‰Šé™¤
+	// ƒm[ƒh‚Ìíœ
 	EraseResult EraseNode(Node* target_node, float cost);
 };
-// æ¢ç´¢ã‚¯ãƒ©ã‚¹
+// ’TõƒNƒ‰ƒX
 class AStar {
 public:
 	AStar() {}
@@ -104,11 +104,11 @@ public:
 	}
 private:
 	void Init();
-	// openã‹ã‚‰æ¬¡ã®æ¢ç´¢ãƒãƒ¼ãƒ‰ã‚’å–å¾—ã™ã‚‹
+	// open‚©‚çŸ‚Ì’Tõƒm[ƒh‚ğæ“¾‚·‚é
 	Node* GetNextNode(NodeList& open_list);
-	// éš£æ¥ãƒãƒ¼ãƒ‰ã‚’æ¢ç´¢ã™ã‚‹
+	// —×Úƒm[ƒh‚ğ’Tõ‚·‚é
 	void OpenAdjacent(Node* node, NodeList& open_list, NodeList& close_list, const Position& end);
-	// openã¸ãƒãƒ¼ãƒ‰ã‚’è¿½åŠ 
+	// open‚Öƒm[ƒh‚ğ’Ç‰Á
 	bool AddOpenList(NodeList& open_list, NodeList& close_list, Node* target_node, float cost);
 
 	std::shared_ptr<Map> map;
