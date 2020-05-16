@@ -12,7 +12,7 @@ std::vector<TestCase> CreateAStarTestCases() {
 	static auto map = std::make_shared<Map>();
 	map->SetMap(std::vector<std::vector<int>> {
 		{ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 1 },
+		{ 1, 1, 1, 0, 1, 1, 1, 0, 0, 0 },
 		{ 1, 0, 0, 0, 1, 1, 1, 1, 0, 1 },
 		{ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -24,30 +24,61 @@ std::vector<TestCase> CreateAStarTestCases() {
 	});
 
 	std::vector<TestCase> testcases;
+	// 正常系1
 	testcases.push_back(TestCase([&]() {
 		AStar astar(map);													// テスト対象生成
 		Route route = astar.Search(Position(1, 1), Position(8, 8), false);	// 実行
 		Route expected = Route(std::list<boost::optional<Position>>			// 期待値
 		{
 			Position(1, 1), Position(2, 1), Position(2, 0), Position(3, 0),
-				Position(4, 0), Position(4, 1), Position(4, 2), Position(4, 3),
-				Position(4, 4), Position(5, 4), Position(5, 5), Position(5, 6),
-				Position(6, 6), Position(6, 7), Position(6, 8), Position(6, 9),
-				Position(7, 9), Position(8, 9), Position(8, 8),
+			Position(4, 0), Position(4, 1), Position(4, 2), Position(4, 3),
+			Position(4, 4), Position(5, 4), Position(5, 5), Position(5, 6),
+			Position(6, 6), Position(6, 7), Position(6, 8), Position(6, 9),
+			Position(7, 9), Position(8, 9), Position(8, 8),
 		});
 		// テスト結果の比較
-		return std::equal(expected.cbegin(), expected.cend(), route.cbegin());
+		return route == expected;
 	}));
+	// 正常系2
 	testcases.push_back(TestCase([&]() {
 		AStar astar(map);
-		Route route = astar.Search(Position(2, 1), Position(8, 1), false);
+		Route route = astar.Search(Position(2, 1), Position(8, 4), false);
 		Route expected = Route(std::list<boost::optional<Position>>
 		{
 			Position(2, 1), Position(2, 0), Position(3, 0), Position(4, 0),
-				Position(5, 0), Position(6, 0), Position(6, 1), Position(7, 1),
-				Position(8, 1),
+			Position(4, 1), Position(5, 1), Position(5, 2), Position(6, 2),
+			Position(6, 3), Position(7, 3), Position(7, 4), Position(8, 4),
 		});
-		return std::equal(expected.cbegin(), expected.cend(), route.cbegin());
+		return route == expected;
+	}));
+	// 解無し（たどり着かない）
+	testcases.push_back(TestCase([&]() {
+		AStar astar(map);
+		Route route = astar.Search(Position(2, 1), Position(8, 0), false);
+		Route expected = Route(std::list<boost::optional<Position>>
+		{
+		});
+		return route == expected;
+	}));
+	// 開始と終了の座標が同じ
+	testcases.push_back(TestCase([&]() {
+		AStar astar(map);
+		Route route = astar.Search(Position(2, 1), Position(2, 1), false);
+		Route expected = Route(std::list<boost::optional<Position>>
+		{
+			Position(2, 1),
+		});
+		return route == expected;
+	}));
+	// １つ隣のノードを探索
+	testcases.push_back(TestCase([&]() {
+		AStar astar(map);
+		Route route = astar.Search(Position(2, 1), Position(2, 0), false);
+		Route expected = Route(std::list<boost::optional<Position>>
+		{
+			Position(2, 1), Position(2, 0),
+		});
+		return route == expected;
 	}));
 
 	return testcases;
@@ -76,7 +107,9 @@ std::vector<TestCase> CreateTestCases() {
 	std::vector<TestCase> testcases;
 	for (auto func : funcs) {
 		auto cases = func();
-		testcases.insert(testcases.end(), cases.begin(), cases.end());
+		if (cases.size() > 0) {
+			testcases.insert(testcases.end(), cases.begin(), cases.end());
+		}
 	}
 
 	return testcases;
