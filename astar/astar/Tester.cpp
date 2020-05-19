@@ -4,6 +4,7 @@
 #include "Tester.h"
 
 #include "AStar.h"
+#include "NetworkTest.h"
 
 // AStarのテストケースを定義
 std::vector<TestCase> CreateAStarTestCases() {
@@ -83,6 +84,27 @@ std::vector<TestCase> CreateAStarTestCases() {
 
 	return testcases;
 }
+// 通信の発生する(という想定の)テストケースを定義
+std::vector<TestCase> CreateNetworkTestCases() {
+	std::vector<TestCase> testcases;
+	// OnHogeの作りだと、問題がある。
+	// 1.本当にクライアントへパケットを送ろうとしてしまう。
+	//   ユニットテストでは実際に接続するクライアントは存在しないのでエラーになる。
+	// 2.結果が返ってこないため成否の判定ができない。
+	//testcases.push_back(TestCase([&]() {
+	//	Network network;
+	//	network.OnHoge(HogeRequest());
+	//	return true;
+	//}));
+	testcases.push_back(TestCase([&]() {
+		Network network;
+		auto response = network.DoFoo(FooRequest());
+		return response.result_code == Network::ResultCode::Success;
+	}));
+
+	return testcases;
+}
+
 // SampleAのテストケースを定義（出力結果確認用のダミーテスト）
 std::vector<TestCase> CreateSampleATestCases() {
 	std::vector<TestCase> testcases;
@@ -100,7 +122,8 @@ std::vector<TestCase> CreateTestCases() {
 	// TODO: 外部環境からコンパイル不要で設定を変更したい
 	auto funcs = {
 		CreateAStarTestCases,
-		CreateSampleATestCases
+		CreateSampleATestCases,
+		CreateNetworkTestCases,
 	};
 
 	// テストケースを作成する
