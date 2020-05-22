@@ -127,6 +127,8 @@
     <ClInclude Include="AStar.h" />
     <ClInclude Include="NetworkTest.h" />
     <ClInclude Include="Tester.h" />
+    <ClInclude Include="Time.h" />
+    <ClInclude Include="TimeTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

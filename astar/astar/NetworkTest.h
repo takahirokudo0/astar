@@ -9,11 +9,6 @@
 #include <boost/optional.hpp>
 #include <boost/function.hpp>
 
-class ITime {
-};
-class IDatabase {
-};
-
 enum class PACKET_ID : int {
 	HOGE,
 	FOO,

@@ -5,6 +5,7 @@
 
 #include "AStar.h"
 #include "NetworkTest.h"
+#include "TimeTest.h"
 
 // AStarのテストケースを定義
 std::vector<TestCase> CreateAStarTestCases() {
@@ -104,6 +105,25 @@ std::vector<TestCase> CreateNetworkTestCases() {
 
 	return testcases;
 }
+// 時間に関わるテストケースを定義
+std::vector<TestCase> CreateTimeTestCases() {
+	std::vector<TestCase> testcases;
+
+	testcases.push_back(TestCase([&]() {
+		TimeTest timetest;
+		TestTime time(boost::posix_time::time_from_string("2020-04-01 00:00:00.000"));
+		timetest.SetTime(&time);
+		return timetest.Func1();
+	}));
+	testcases.push_back(TestCase([&]() {
+		TimeTest timetest;
+		TestTime time(boost::posix_time::time_from_string("2020-05-01 05:00:00.000"));
+		timetest.SetTime(&time);
+		return timetest.Func2();
+	}));
+
+	return testcases;
+}
 
 // SampleAのテストケースを定義（出力結果確認用のダミーテスト）
 std::vector<TestCase> CreateSampleATestCases() {
@@ -121,6 +141,7 @@ std::vector<TestCase> CreateTestCases() {
 	// テスト対象のテストケース定義メソッドをセット
 	// TODO: 外部環境からコンパイル不要で設定を変更したい
 	auto funcs = {
+		CreateTimeTestCases,
 		CreateAStarTestCases,
 		CreateSampleATestCases,
 		CreateNetworkTestCases,
