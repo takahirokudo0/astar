@@ -6,6 +6,8 @@
 #include "AStar.h"
 #include "NetworkTest.h"
 #include "TimeTest.h"
+#include "WebApi.h"
+#include "WebApiTest.h"
 
 // AStarのテストケースを定義
 std::vector<TestCase> CreateAStarTestCases() {
@@ -124,7 +126,40 @@ std::vector<TestCase> CreateTimeTestCases() {
 
 	return testcases;
 }
+// WebApiに関わるテストケースを定義
+std::vector<TestCase> CreateWebApiTestCases() {
+	std::vector<TestCase> testcases;
+	// WebApiのモックを使用するパターン
+	testcases.push_back(TestCase([&]() {
+		WebApiTest test;	// WebApiを利用する機能で今回のテスト対象クラス
+		TestWebApi webapi;	// WebApiのモッククラス
+		test.SetWebApi(&webapi);
+		bool result = false;
+		test.Func1([&](const Response&) {
+			// Callbackが呼ばれたら成功にする
+			result = true;
+		});
+		// WebApiからの応答を待つ(Limit;300ミリ秒)
+		Sleep(300);
+		return result;
+	}));
+	// 未完成のWebApiを使用してエラーになるパターン
+	testcases.push_back(TestCase([&]() {
+		WebApiTest test;	// WebApiを利用する機能で今回のテスト対象クラス
+		WebApi webapi;		// 実際のWebApiは通信できないため、callbackが呼ばれずエラーになる
+		test.SetWebApi(&webapi);
+		bool result = false;
+		test.Func1([&](const Response&) {
+			// Callbackが呼ばれたら成功にする（でも呼ばれない）
+			result = true;
+		});
+		// WebApiからの応答を待つ(Limit;300ミリ秒)
+		Sleep(300);
+		return result;
+	}));
 
+	return testcases;
+}
 // SampleAのテストケースを定義（出力結果確認用のダミーテスト）
 std::vector<TestCase> CreateSampleATestCases() {
 	std::vector<TestCase> testcases;
@@ -141,6 +176,7 @@ std::vector<TestCase> CreateTestCases() {
 	// テスト対象のテストケース定義メソッドをセット
 	// TODO: 外部環境からコンパイル不要で設定を変更したい
 	auto funcs = {
+		CreateWebApiTestCases,
 		CreateTimeTestCases,
 		CreateAStarTestCases,
 		CreateSampleATestCases,

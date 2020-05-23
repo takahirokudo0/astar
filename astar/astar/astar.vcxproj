@@ -129,6 +129,8 @@
     <ClInclude Include="Tester.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TimeTest.h" />
+    <ClInclude Include="WebApi.h" />
+    <ClInclude Include="WebApiTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
